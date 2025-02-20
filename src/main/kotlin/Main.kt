@@ -121,10 +121,21 @@ fun main() {
             p {  }
             h1 { + "#3"}
             h2 { +"Numero de estaciones por provincia" }
-            meteo.forEach { meteo ->
-                meteo.listDatosDiarios.forEach {
-                    it.listaEstacions.groupBy { it.provincia }.forEach {
-                        ul { +"En +${it.key}+ posee un total de ${it.value.size} estaciones" }
+            table {
+                tr {
+                    th { +"provincia" }
+                    th { +"numero estaciones"}
+                }
+                meteo.forEach { meteo ->
+                    meteo.listDatosDiarios.forEach {
+
+                            it.listaEstacions.groupBy { it.provincia }.forEach {
+                                tr {
+                                    td { attributes["align"] = "center"; +it.key }
+                                    td { attributes["align"] = "center"; +it.value.size.toString()}
+                                }
+                            }
+
                     }
                 }
             }
