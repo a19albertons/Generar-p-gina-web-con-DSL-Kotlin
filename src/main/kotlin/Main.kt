@@ -1,9 +1,12 @@
+import java.io.File
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
+import kotlinx.html.*
+import kotlinx.html.stream.createHTML
 
 @Serializable
 data class Meteo(
@@ -72,39 +75,47 @@ fun main() {
     //println(users)
 
     // Imprimir los usuarios con diversos campos
-    println("#1")
-    println("Concellos de A Coruña con estacion ordenados alfabeticamente")
-    meteo.forEach { meteo ->
-        meteo.listDatosDiarios.forEach{
-            it.listaEstacions.filter{ it.provincia == "A Coruña" }.distinctBy { it.concello }.sortedBy { it.concello }.forEach{
-                println("Concello: ${it.concello}")
-            }
+    val paginaweb = createHTML().html {
+        head {
+            meta(charset = "UTF-8")
+            title("Datos meteoroligocos")
         }
-    }
+        body {
+            h1 { +"#1" }
+            h2 { +"Concellos de A Coruña con estacion ordenados alfabeticamente" }
+            meteo.forEach { meteo ->
+                meteo.listDatosDiarios.forEach{
+                    it.listaEstacions.filter{ it.provincia == "A Coruña" }.distinctBy { it.concello }.sortedBy { it.concello }.forEach{
+                        ul { +"Concello: ${it.concello}" }
+                    }
+                }
+            }
+            p {  }
+            h1 { +"#2" }
+            h2 { +"Estaciones mayor temperatura maxima a menor" }
+            meteo.forEach { meteo ->
+                meteo.listDatosDiarios.forEach{
+                    val listaTemperaturas = it.listaEstacions.map { estacion ->
+                        val temperatura = estacion.listaMedidas.find { it.codigoParametro == "TA_MAX_1.5m" }?.valor ?: -9999.0 // Si el valor es nulo indicamos -9999.0 viendo los numeros de algunas estaciones
+                        temperaturaMaxima(estacion.estacion, temperatura)
+                    }
+                    listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
+                        ul { +"Estacion: ${it.estacion} Temperatura: ${it.temperatura}" }
+                    }
+                }
+            }
 
-    println()
-    println("#2")
-    println("Estaciones mayor temperatura maxima a menor")
-    meteo.forEach { meteo ->
-        meteo.listDatosDiarios.forEach{
-            val listaTemperaturas = it.listaEstacions.map { estacion ->
-                val temperatura = estacion.listaMedidas.find { it.codigoParametro == "TA_MAX_1.5m" }?.valor ?: -9999.0 // Si el valor es nulo indicamos -9999.0 viendo los numeros de algunas estaciones
-                temperaturaMaxima(estacion.estacion, temperatura)
-            }
-            listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
-                println("Estacion: ${it.estacion} Temperatura: ${it.temperatura}")
+            p {  }
+            h1 { + "#3"}
+            h2 { +"Numero de estaciones por provincia" }
+            meteo.forEach { meteo ->
+                meteo.listDatosDiarios.forEach {
+                    it.listaEstacions.groupBy { it.provincia }.forEach {
+                        ul { +"En +${it.key}+ posee un total de ${it.value.size} estaciones" }
+                    }
+                }
             }
         }
     }
-
-    println()
-    println("#3")
-    println("Numero de estaciones por provincia")
-    meteo.forEach { meteo ->
-        meteo.listDatosDiarios.forEach {
-            it.listaEstacions.groupBy { it.provincia }.forEach {
-                println("En "+it.key+" posee un total de "+it.value.size+" estaciones")
-            }
-        }
-    }
+    File("test.html").writeText(paginaweb)
 }
