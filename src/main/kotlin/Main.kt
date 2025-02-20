@@ -85,25 +85,38 @@ fun main() {
             h2 { +"Concellos de A Coruña con estacion ordenados alfabeticamente" }
             meteo.forEach { meteo ->
                 meteo.listDatosDiarios.forEach{
-                    it.listaEstacions.filter{ it.provincia == "A Coruña" }.distinctBy { it.concello }.sortedBy { it.concello }.forEach{
-                        ul { +"Concello: ${it.concello}" }
+                    ul {
+                        it.listaEstacions.filter { it.provincia == "A Coruña" }.distinctBy { it.concello }
+                            .sortedBy { it.concello }.forEach {
+                            li { +"Concello: ${it.concello}" }
+                        }
                     }
                 }
             }
             p {  }
             h1 { +"#2" }
             h2 { +"Estaciones mayor temperatura maxima a menor" }
-            meteo.forEach { meteo ->
-                meteo.listDatosDiarios.forEach{
-                    val listaTemperaturas = it.listaEstacions.map { estacion ->
-                        val temperatura = estacion.listaMedidas.find { it.codigoParametro == "TA_MAX_1.5m" }?.valor ?: -9999.0 // Si el valor es nulo indicamos -9999.0 viendo los numeros de algunas estaciones
-                        temperaturaMaxima(estacion.estacion, temperatura)
-                    }
-                    listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
-                        ul { +"Estacion: ${it.estacion} Temperatura: ${it.temperatura}" }
+            table {
+                tr {
+                    th { +"estacion" }
+                    th { +"temperatura" }
+                }
+                meteo.forEach { meteo ->
+                    meteo.listDatosDiarios.forEach{
+                        val listaTemperaturas = it.listaEstacions.map { estacion ->
+                            val temperatura = estacion.listaMedidas.find { it.codigoParametro == "TA_MAX_1.5m" }?.valor ?: -9999.0 // Si el valor es nulo indicamos -9999.0 viendo los numeros de algunas estaciones
+                            temperaturaMaxima(estacion.estacion, temperatura)
+                        }
+                        listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
+                            tr {
+                                td { attributes["align"] = "center"; +it.estacion } // atributos dado por copilot
+                                td { attributes["align"] = "center"; +it.temperatura.toString() } // atributos dado por copilot
+                            }
+                        }
                     }
                 }
             }
+
 
             p {  }
             h1 { + "#3"}
