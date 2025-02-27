@@ -76,6 +76,7 @@ fun main() {
 
     // Imprimir los usuarios con diversos campos
     val paginaweb = createHTML().html {
+        lang = "es"
         head {
             meta(charset = "UTF-8")
             title("Datos meteoroligocos")
