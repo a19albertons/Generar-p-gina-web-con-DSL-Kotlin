@@ -97,10 +97,10 @@ fun main() {
             p {  }
             h1 { +"#2" }
             h2 { +"Estaciones mayor temperatura maxima a menor" }
-            table { style = "border: 1 px solid black"
+            table { style = "border: 1px solid black;"
                 tr {
-                    th { +"estacion" }
-                    th { +"temperatura" }
+                    th { style = "border: 1px solid black;"; +"estacion" }
+                    th { style = "border: 1px solid black;"; +"temperatura" }
                 }
                 meteo.forEach { meteo ->
                     meteo.listDatosDiarios.forEach{
@@ -110,8 +110,8 @@ fun main() {
                         }
                         listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
                             tr {
-                                td { style = "text-align: center;" ; +it.estacion } // atributos dado por copilot
-                                td { style = "text-align: center;"; +it.temperatura.toString() } // atributos dado por copilot
+                                td { style = "text-align: center; border: 1px solid black;" ; +it.estacion } // atributos dado por copilot
+                                td { style = "text-align: center; border: 1px solid black;" ; +it.temperatura.toString() } // atributos dado por copilot
                             }
                         }
                     }
@@ -122,18 +122,18 @@ fun main() {
             p {  }
             h1 { + "#3"}
             h2 { +"Numero de estaciones por provincia" }
-            table { style = "border: 1 px solid black"
+            table { style = "border: 1px solid black"
                 tr {
-                    th { +"provincia" }
-                    th { +"numero estaciones"}
+                    th { style = "text-align: center; border: 1px solid black;" ; +"provincia" }
+                    th { style = "text-align: center; border: 1px solid black;" ; +"numero estaciones"}
                 }
                 meteo.forEach { meteo ->
                     meteo.listDatosDiarios.forEach {
 
                             it.listaEstacions.groupBy { it.provincia }.forEach {
                                 tr {
-                                    td { style = "text-align: center;" ; +it.key }
-                                    td { style = "text-align: center;"; +it.value.size.toString()}
+                                    td { style = "text-align: center; border: 1px solid black;" ; +it.key }
+                                    td { style = "text-align: center; border: 1px solid black;" ; +it.value.size.toString()}
                                 }
                             }
 
