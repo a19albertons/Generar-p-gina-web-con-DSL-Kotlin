@@ -96,7 +96,7 @@ fun main() {
             p {  }
             h1 { +"#2" }
             h2 { +"Estaciones mayor temperatura maxima a menor" }
-            table { attributes["border"] = "1 px solid black"
+            table { style = "border: 1 px solid black"
                 tr {
                     th { +"estacion" }
                     th { +"temperatura" }
@@ -109,8 +109,8 @@ fun main() {
                         }
                         listaTemperaturas.sortedByDescending { it.temperatura }.forEach{
                             tr {
-                                td { attributes["align"] = "center"; +it.estacion } // atributos dado por copilot
-                                td { attributes["align"] = "center"; +it.temperatura.toString() } // atributos dado por copilot
+                                td { style = "text-align: center;" ; +it.estacion } // atributos dado por copilot
+                                td { style = "text-align: center;"; +it.temperatura.toString() } // atributos dado por copilot
                             }
                         }
                     }
@@ -121,7 +121,7 @@ fun main() {
             p {  }
             h1 { + "#3"}
             h2 { +"Numero de estaciones por provincia" }
-            table { attributes["border"] = "1 px solid black"
+            table { style = "border: 1 px solid black"
                 tr {
                     th { +"provincia" }
                     th { +"numero estaciones"}
@@ -131,8 +131,8 @@ fun main() {
 
                             it.listaEstacions.groupBy { it.provincia }.forEach {
                                 tr {
-                                    td { attributes["align"] = "center"; +it.key }
-                                    td { attributes["align"] = "center"; +it.value.size.toString()}
+                                    td { style = "text-align: center;" ; +it.key }
+                                    td { style = "text-align: center;"; +it.value.size.toString()}
                                 }
                             }
 
